@@ -1,0 +1,47 @@
+#--------------------------------------------------------------
+# Redmine docker-compose
+#--------------------------------------------------------------
+version: '3'
+
+#---NETWORKS---------------------------------------------------
+networks:
+  default:
+    external:
+      name: common
+
+#---VOLUMES ---------------------------------------------------
+volumes:
+  data:
+    driver: convoy
+  mysql:
+    driver: convoy
+  mysqld:
+    driver: convoy
+
+#---SERVICES---------------------------------------------------
+services:
+  redmine:
+    image: 'sameersbn/redmine:3.4.2'
+    depends_on:
+      - mysql
+      - postfix
+    ports:
+      - '14080:80'
+    volumes:
+      - 'data:/home/redmine/data'
+    env_file:
+      - 'redmine.env'
+
+  mysql:
+    image: 'sameersbn/mysql:latest'
+    volumes:
+      - 'mysql:/var/lib/mysql'
+      - 'mysqld:/run/mysqld'
+    env_file:
+      - 'mysql.env'
+
+  postfix:
+    image: 'catatnight/postfix:latest'
+    environment:
+      maildomain: 'example.com'
+      smtp_user: 'redmine:redmine'

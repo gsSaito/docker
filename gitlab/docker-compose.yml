@@ -1,0 +1,42 @@
+#--------------------------------------------------------------
+# GitLab docker-compose
+#--------------------------------------------------------------
+version: '3'
+
+#---NETWORKS---------------------------------------------------
+networks:
+  default:
+    external:
+      name: common
+
+#---VOLUMES ---------------------------------------------------
+volumes:
+  config: # GitLab config
+    driver: convoy
+  logs:   # GitLab logs
+    driver: convoy
+  data:   # GitLab main data
+    driver: convoy
+
+#---SERVICES---------------------------------------------------
+services:
+  gitlab:
+    image: 'gitlab/gitlab-ce:latest'
+    ports:
+      - '10080:10080' # http
+      - '10022:22' # ssh
+    volumes:
+      - 'config:/etc/gitlab'
+      - 'logs:/var/log/gitlab'
+      - 'data:/var/opt/gitlab'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://127.0.0.1:10080'
+        gitlab_rails['time_zone'] = 'Asia/Tokyo'
+        gitlab_rails['gitlab_shell_ssh_port'] = 10022
+        gitlab_rails['lfs_enabled'] = true
+        #gitlab_rails['registry_enabled'] = true
+        node_exporter['enable'] = false # 
+        prometheus_monitoring['enable'] = false # 
+
+

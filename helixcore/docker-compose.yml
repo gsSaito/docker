@@ -1,0 +1,33 @@
+#--------------------------------------------------------------
+# HelixCore docker-compose
+#--------------------------------------------------------------
+version: '3'
+
+#---NETWORKS---------------------------------------------------
+networks:
+  default:
+    external:
+      name: common
+
+#---VOLUMES ---------------------------------------------------
+volumes:
+  servers:
+
+
+#---SERVICES---------------------------------------------------
+services:
+  helixcore:
+    volumes:
+      - 'servers:/opt/perforce/servers'
+    build: ./p4d
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    privileged: true
+    command:
+      - /sbin/init
+    image: p4d
+    ports:
+      - "1666:1666"
+

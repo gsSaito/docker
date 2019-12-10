@@ -1,0 +1,27 @@
+#--------------------------------------------------------------
+# HelixCore docker-compose
+#--------------------------------------------------------------
+version: '3'
+
+#---NETWORKS---------------------------------------------------
+networks:
+  default:
+    external:
+      name: common
+
+#---VOLUMES ---------------------------------------------------
+
+
+#---SERVICES---------------------------------------------------
+services:
+  helixcore:
+    build: ./centos
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    privileged: true
+    command:
+      - /sbin/init
+    image: centos
+

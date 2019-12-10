@@ -1,0 +1,33 @@
+#--------------------------------------------------------------
+# HelixCore docker-compose
+#--------------------------------------------------------------
+version: '3'
+
+#---NETWORKS---------------------------------------------------
+networks:
+  default:
+    external:
+      name: common
+
+#---VOLUMES ---------------------------------------------------
+volumes:
+  servers:
+
+
+#---SERVICES---------------------------------------------------
+services:
+  helixsaml:
+    volumes:
+      - 'servers:/opt/perforce/servers'
+    build: ./p4saml
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    privileged: true
+    command:
+      - /sbin/init
+    image: p4saml
+    ports:
+      - "1666:1666"
+
