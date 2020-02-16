@@ -28,7 +28,7 @@ RUN yum clean all --enablerepo='*' \
 
 RUN rpm --import https://package.perforce.com/perforce.pubkey
 RUN yum-config-manager --add-repo https://gist.githubusercontent.com/hexagrimoire/032c761c748fac87f2e0da9d6b9acc55/raw/52968f498cc618cbfe0a76f189c8ebd26bdefa31/perforce.centos7.repo
-RUN yum install -y wget git tzdata helix-p4d
+RUN yum install -y wget git tzdata helix-p4d ldapsearch
 
 # --------------------------------------------------------------------------------
 # HelixCore FILE COPY
@@ -55,6 +55,7 @@ ARG P4TCP=1666
 ARG P4USER=super
 ARG P4PASSWD=Passw0rd
 ARG P4CASE=-C0
+ARG P4HOME=/opt/perforce/servers
 
 # Default Environment
 ENV P4NAME=$P4NAME \
@@ -62,7 +63,7 @@ ENV P4NAME=$P4NAME \
     P4PORT=ssl:$P4TCP \
     P4USER=$P4USER \
     P4PASSWD=$P4PASSWD \
-    P4HOME=/opt/perforce/servers \
+    P4HOME=$P4HOME \
     P4ROOT=$P4HOME/$P4NAME \
     CASE_INSENSITIVE=y
 

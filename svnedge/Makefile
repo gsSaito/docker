@@ -12,5 +12,9 @@ remove:
 logs:
 	docker-compose -p ${STACK} logs -f
 shell:
-	winpty docker exec -it ${CONTAINER} bash
-	
+	docker exec -it ${CONTAINER} bash
+
+build:
+	docker-compose -f ${COMPOSE_FILE} build
+rebuild:
+	docker-compose -f ${COMPOSE_FILE} build --no-cache
